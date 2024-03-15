@@ -2,20 +2,17 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import supabase from "../config/supabaseClient";
 
-const Login = () => {
+const RecoverPassword = () => {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [formError, setFormError] = useState(null);
+  const [closeWindow, setCloseWindow] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    let { data, error } = await supabase.auth.signInWithPassword({
-      email: email,
-      password: password,
-    });
+    let { data, error } = await supabase.auth.resetPasswordForEmail(email);
 
     if (error) {
       console.log(error);
@@ -24,8 +21,7 @@ const Login = () => {
 
     if (data) {
       setFormError(null);
-      localStorage.setItem("user", JSON.stringify(data?.session?.user));
-      window.location.href = "/";
+      setCloseWindow(true);
     }
   };
 
@@ -40,26 +36,17 @@ const Login = () => {
           onChange={(e) => setEmail(e.target.value)}
         />
 
-        <label htmlFor="password">password:</label>
-        <input
-          type="text"
-          id="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-
-        <button>Sign in</button>
+        <button>Recover password</button>
 
         {formError && <p className="error">{formError}</p>}
       </form>
-      <p
-        className="text-center py-4 underline cursor-pointer"
-        onClick={() => window.open("/recoverpassword", "__blank")}
-      >
-        Forgot Password
-      </p>
+      {closeWindow && (
+        <div className=" text-center py-4">
+          <p>Recovery link sent to your email pls close this window</p>
+        </div>
+      )}
     </div>
   );
 };
 
-export default Login;
+export default RecoverPassword;

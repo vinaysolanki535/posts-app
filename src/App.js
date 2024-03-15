@@ -5,6 +5,8 @@ import Create from "./pages/Create";
 import Update from "./pages/Update";
 import Login from "./pages/Login";
 import { useEffect, useState } from "react";
+import RecoverPassword from "./pages/RecoverPassword";
+import UpdatePassword from "./pages/UpdatePassword";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -57,6 +59,8 @@ function App() {
           path="/login"
           element={!loggedIn ? <Login /> : <Navigate to="/" />}
         />
+        <Route path="/recoverpassword" element={<RecoverPassword />} />
+        <Route path="/updatepassword" element={<UpdatePassword />} />
       </Routes>
     </BrowserRouter>
   );

@@ -19,7 +19,7 @@ const Home = () => {
     if (error) {
       console.log(error);
     }
-    if (data) {
+    if (data && data?.length > 0) {
       const remainingPosts = posts.filter((post) => post.id !== id);
       setPosts(remainingPosts);
     }

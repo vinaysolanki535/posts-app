@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import supabase from "../config/supabaseClient";
 
-const Login = () => {
+const UpdatePassword = () => {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -12,7 +12,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    let { data, error } = await supabase.auth.signInWithPassword({
+    let { data, error } = await supabase.auth.updateUser({
       email: email,
       password: password,
     });
@@ -21,10 +21,9 @@ const Login = () => {
       console.log(error);
       setFormError("Please fill in all the fields correctly.");
     }
-
+    console.log("data", data);
     if (data) {
       setFormError(null);
-      localStorage.setItem("user", JSON.stringify(data?.session?.user));
       window.location.href = "/";
     }
   };
@@ -32,7 +31,7 @@ const Login = () => {
   return (
     <div className="page create">
       <form onSubmit={handleSubmit}>
-        <label htmlFor="Email Id">Email:</label>
+        <label htmlFor="Email Id">Email: (should be same as user)</label>
         <input
           type="text"
           id="title"
@@ -40,7 +39,7 @@ const Login = () => {
           onChange={(e) => setEmail(e.target.value)}
         />
 
-        <label htmlFor="password">password:</label>
+        <label htmlFor="password">New password:</label>
         <input
           type="text"
           id="password"
@@ -48,18 +47,12 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button>Sign in</button>
+        <button>update Password</button>
 
         {formError && <p className="error">{formError}</p>}
       </form>
-      <p
-        className="text-center py-4 underline cursor-pointer"
-        onClick={() => window.open("/recoverpassword", "__blank")}
-      >
-        Forgot Password
-      </p>
     </div>
   );
 };
 
-export default Login;
+export default UpdatePassword;
